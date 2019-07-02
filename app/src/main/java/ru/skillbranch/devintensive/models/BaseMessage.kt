@@ -30,7 +30,7 @@ abstract class BaseMessage(
                     image = payload as String,
                     isIncoming = isIncoming
                 )
-                else -> TextMessage(
+                "text" -> TextMessage(
                     "$lastId",
                     from,
                     chat,
@@ -38,6 +38,8 @@ abstract class BaseMessage(
                     text = payload as String,
                     isIncoming = isIncoming
                 )
+                else -> if ("image" == payload || "text" == payload) makeMessage(from, chat, date, payload, type, isIncoming)
+                        else throw IllegalArgumentException()
             }
         }
     }
