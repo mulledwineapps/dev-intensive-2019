@@ -1,4 +1,4 @@
-package ru.skillbranch.devintensive.extension
+package ru.skillbranch.devintensive.extensions
 
 import java.lang.Math.abs
 import java.text.SimpleDateFormat
