@@ -3,7 +3,6 @@ package ru.skillbranch.devintensive
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -13,9 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
-import ru.skillbranch.devintensive.extensions.hideKeyBoard
-import ru.skillbranch.devintensive.utils.KeyboardUtils
+import ru.skillbranch.devintensive.extensions.hideKeyboard
 
 class MainActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEditorActionListener {
 
@@ -85,7 +82,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
         Log.d("M_MainActivity","OnEditorAction: actionId = $actionId")
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             sendAnswer()
-            hideKeyBoard()
+            hideKeyboard()
         }
         return false
     }

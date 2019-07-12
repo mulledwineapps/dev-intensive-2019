@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 
-fun Activity.hideKeyBoard() {
+fun Activity.hideKeyboard() {
     val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     //Find the currently focused view, so we can grab the correct window token from it.
     //If no view currently has focus, create a new one, just so we can grab a window token from it
@@ -20,13 +20,12 @@ fun Activity.hideKeyBoard() {
 //val Activity.isKeyboardClosed: Boolean
     //get() = !keyboardIsOpen(this)
 
-fun Activity.isKeyboardOpen() : Boolean = keyboardIsOpen(this)
-fun Activity.isKeyboardClosed() : Boolean = !keyboardIsOpen(this)
+fun Activity.isKeyboardClosed() : Boolean = this.isKeyboardOpen().not()
 
 // https://github.com/ravindu1024/android-keyboardlistener/blob/master/keyboard-listener/src/main/java/com/rw/keyboardlistener/KeyboardUtils.java
-private fun keyboardIsOpen(activity: Activity): Boolean {
-    val rootView = activity.findViewById(android.R.id.content) as ViewGroup
-    val screenDensity = activity.resources.displayMetrics.density
+fun Activity.isKeyboardOpen(): Boolean {
+    val rootView = this.findViewById(android.R.id.content) as ViewGroup
+    val screenDensity = this.resources.displayMetrics.density
 
     val r = Rect()
     rootView.getWindowVisibleDisplayFrame(r)
