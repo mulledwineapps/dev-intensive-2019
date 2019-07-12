@@ -14,11 +14,14 @@ fun Activity.hideKeyBoard() {
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-val Activity.isKeyboardOpen: Boolean
-    get() = keyboardIsOpen(this)
+//val Activity.isKeyboardOpen: Boolean
+    //get() = keyboardIsOpen(this)
 
-val Activity.isKeyboardClosed: Boolean
-    get() = !keyboardIsOpen(this)
+//val Activity.isKeyboardClosed: Boolean
+    //get() = !keyboardIsOpen(this)
+
+fun Activity.isKeyboardOpen() : Boolean = keyboardIsOpen(this)
+fun Activity.isKeyboardClosed() : Boolean = !keyboardIsOpen(this)
 
 // https://github.com/ravindu1024/android-keyboardlistener/blob/master/keyboard-listener/src/main/java/com/rw/keyboardlistener/KeyboardUtils.java
 private fun keyboardIsOpen(activity: Activity): Boolean {
