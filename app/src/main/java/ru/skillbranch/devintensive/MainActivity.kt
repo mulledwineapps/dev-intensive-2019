@@ -65,13 +65,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
     }
 
     private fun sendAnswer() {
-        if (benderObj.question != Bender.Question.IDLE) {
-            val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString()) //.toLowerCase()
-            messageEt.setText("")
-            val (r, g, b) = color
-            benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
-            tv_text.text = phrase
-        }
+        val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString())
+        messageEt.setText("")
+        val (r, g, b) = color
+        benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
+        tv_text.text = phrase
     }
 
     override fun onClick(v: View?) {

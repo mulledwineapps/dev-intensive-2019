@@ -1,10 +1,6 @@
 package ru.skillbranch.devintensive
 
-import android.util.Log
-
 class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
-
-    var wrongAnswersCount: Int = 0
 
     fun askQuestion(): String = when (question) {
         Question.NAME -> Question.NAME.question
@@ -16,29 +12,31 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
     }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
-        val benderReply: String
-        if (question.answerIsValid(answer)){
-            if (question.answers.map { a -> a.toLowerCase() }.contains(answer.toLowerCase())) {
-                benderReply = "Отлично - ты справился\n"
-                status = Status.NORMAL
+        return if (question == Question.IDLE) question.question to status.color
+        else "${replyAnswer(answer)}\n${question.question}" to status.color
+    }
+
+    private fun replyAnswer(answer: String): String {
+        return when {
+            question.answerIsValid(answer).not() -> "${question.hint}\n"
+            question.answers.map { a -> a.toLowerCase() }.contains(answer.toLowerCase()) -> {
                 question = question.nextQuestion()
-            } else {
-                wrongAnswersCount++
-                //if (status.ordinal == Status.values().lastIndex) {
-                if (wrongAnswersCount > 3) {
-                    wrongAnswersCount = 0
-                    println("it is wrong answer")
-                    benderReply = "Это неправильный ответ. Давай все по новой\n"
-                    question = Question.NAME
-                    status = Status.NORMAL
+                "Отлично - ты справился"
+            } else -> {
+                if (status.ordinal == Status.values().lastIndex) {
+                    setParametersToDefault()
+                    "Это неправильный ответ. Давай все по новой"
                 } else {
-                    benderReply = "Это неправильный ответ\n"
                     status = status.nextStatus()
+                    "Это неправильный ответ"
                 }
             }
-        } else benderReply = "${question.hint}\n"
+        }
+    }
 
-        return "$benderReply${question.question}" to status.color
+    private fun setParametersToDefault() {
+        status = Status.NORMAL
+        question = Question.NAME
     }
 
     enum class Status(val color: Triple<Int, Int, Int>) {
