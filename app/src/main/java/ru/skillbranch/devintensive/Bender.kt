@@ -1,6 +1,10 @@
 package ru.skillbranch.devintensive
 
+import android.util.Log
+
 class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
+
+    var wrongAnswersCount: Int = 0
 
     fun askQuestion(): String = when (question) {
         Question.NAME -> Question.NAME.question
@@ -19,7 +23,11 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
                 status = Status.NORMAL
                 question = question.nextQuestion()
             } else {
-                if (status.ordinal == Status.values().lastIndex) {
+                wrongAnswersCount++
+                //if (status.ordinal == Status.values().lastIndex) {
+                if (wrongAnswersCount > 3) {
+                    wrongAnswersCount = 0
+                    println("it is wrong answer")
                     benderReply = "Это неправильный ответ. Давай все по новой\n"
                     question = Question.NAME
                     status = Status.NORMAL
