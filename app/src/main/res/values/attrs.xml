@@ -8,14 +8,14 @@
     <attr name="colorDivider" format="reference"/>
     <attr name="colorIcon" format="reference"/>
 
-    <declare-styleable name="CircleImageView">
+    <declare-styleable name="BaseCircleImageView">
         <attr name="cv_borderColor" format="color"/>
         <attr name="cv_borderWidth" format="dimension"/>
         <attr name="highlightEnable" format="boolean"/>
         <attr name="highlightColor" format="color"/>
     </declare-styleable>
 
-    <declare-styleable name="AvatarImageView">
+    <declare-styleable name="CircleImageView">
         <attr name="avatarBackgroundColor" format="color"/>
         <attr name="textSize" format="dimension"/>
         <attr name="textColor" format="color"/>
