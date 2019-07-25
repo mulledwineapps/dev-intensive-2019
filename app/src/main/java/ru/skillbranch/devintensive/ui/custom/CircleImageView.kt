@@ -32,7 +32,7 @@ open class CircleImageView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
-        private val DEFAULT_BORDER_WIDTH = 2.dpToPx
+        private val DEFAULT_BORDER_WIDTH = 2.dpToPx()
         private const val DEFAULT_HIGHLIGHT_COLOR = 0x32000000
         private const val DEFAULT_HIGHLIGHT_ENABLE = true
     }
@@ -57,7 +57,7 @@ open class CircleImageView @JvmOverloads constructor(
     private var initialized: Boolean = true
     private var pPressed: Boolean = false
 
-    // TODO использовать этот класс, а не аватар!
+    // TODO использовать этот класс, а не аватар?
 
     init {
         if (attrs != null) {
@@ -82,7 +82,7 @@ open class CircleImageView @JvmOverloads constructor(
     fun getBorderWidth(): Int = borderWidth
 
     fun setBorderWidth(dp: Int) {
-        borderWidth = dp.dpToPx
+        borderWidth = dp.dpToPx()
     }
 
     fun getBorderColor(): Int {

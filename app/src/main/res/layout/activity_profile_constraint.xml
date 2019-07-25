@@ -13,7 +13,7 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintDimensionRatio="16:9" android:scaleType="centerCrop"/>
-    <ImageView
+    <ru.skillbranch.devintensive.ui.custom.AvatarImageView
             android:layout_width="@dimen/avatar_round_size"
             android:layout_height="@dimen/avatar_round_size"
             app:srcCompat="@drawable/avatar_default"

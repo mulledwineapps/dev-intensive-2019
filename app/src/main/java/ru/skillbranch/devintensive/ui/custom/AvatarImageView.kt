@@ -9,6 +9,8 @@ import androidx.annotation.Dimension
 import androidx.annotation.IntDef
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
+import ru.skillbranch.devintensive.extensions.pxToSp
+import ru.skillbranch.devintensive.extensions.spToPx
 import ru.skillbranch.devintensive.utils.Utils
 
 class AvatarImageView @JvmOverloads constructor(
@@ -23,7 +25,7 @@ class AvatarImageView @JvmOverloads constructor(
 
         private const val DEFAULT_INITIALS = ""
         private const val DEFAULT_TEXT_COLOR = Color.WHITE
-        private const val DEFAULT_TEXT_SIZE = 90
+        private const val DEFAULT_TEXT_SIZE = 48
 
         @State
         private val DEFAULT_STATE = SHOW_INITIAL
@@ -85,7 +87,7 @@ class AvatarImageView @JvmOverloads constructor(
 
         textPaint.textAlign = Paint.Align.CENTER
         textPaint.color = textColor
-        textPaint.textSize = textSize.toFloat()
+        textPaint.textSize = textSize.spToPx()
 
         updateTextBounds()
 
@@ -112,10 +114,10 @@ class AvatarImageView @JvmOverloads constructor(
     }
 
     @Dimension
-    fun getTextSize() = textPaint.textSize
+    fun getTextSize() = textPaint.textSize.pxToSp()
 
     fun setTextSize(@Dimension size: Float) {
-        textPaint.textSize = size
+        textPaint.textSize = size.spToPx()
         updateTextBounds()
         invalidate()
     }
