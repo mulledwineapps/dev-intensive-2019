@@ -18,7 +18,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
     private fun replyAnswer(answer: String): String {
         return when {
-            question.answerIsValid(answer).not() -> "${question.hint}"
+            question.answerIsValid(answer).not() -> question.hint
             question.answers.map { a -> a.toLowerCase() }.contains(answer.toLowerCase()) -> {
                 question = question.nextQuestion()
                 "Отлично - ты справился"

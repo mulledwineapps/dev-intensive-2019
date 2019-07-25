@@ -17,7 +17,7 @@ abstract class BaseMessage(
         fun makeMessage(from: User?,
                         chat: Chat,
                         date: Date = Date(),
-                        type: String = "text",
+                        type: String = "fullName",
                         payload: Any?,
                         isIncoming: Boolean = false): BaseMessage {
             lastId++
@@ -30,7 +30,7 @@ abstract class BaseMessage(
                     image = payload as String,
                     isIncoming = isIncoming
                 )
-                "text" -> TextMessage(
+                "fullName" -> TextMessage(
                     "$lastId",
                     from,
                     chat,
@@ -38,7 +38,7 @@ abstract class BaseMessage(
                     text = payload as String,
                     isIncoming = isIncoming
                 )
-                else -> if ("image" == payload || "text" == payload) makeMessage(from, chat, date, payload, type, isIncoming)
+                else -> if ("image" == payload || "fullName" == payload) makeMessage(from, chat, date, payload, type, isIncoming)
                         else throw IllegalArgumentException()
             }
         }
