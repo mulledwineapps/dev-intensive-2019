@@ -135,7 +135,8 @@ class AvatarImageView @JvmOverloads constructor(
         return extractInitials(firstName, lastName)
     }
 
-    private fun extractInitials(firstName: String?, lastName: String?) = Utils.toInitials(firstName, lastName) ?: "?"
+    private fun extractInitials(firstName: String?, lastName: String?) =
+        Utils.toInitials(firstName, lastName) ?: DEFAULT_INITIALS
 
     private fun updateTextBounds() {
         textPaint.getTextBounds(initials, 0, initials.length, textBounds)
