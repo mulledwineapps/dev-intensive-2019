@@ -6,8 +6,8 @@
     <!-- <item android:drawable="@android:color/white"/> -->
     <item android:drawable="@color/color_primary"/>
 
-    <!-- Лого приложения - 144dp версия иконки приложения -->
     <item>
+        <!-- c вектором bitmap src, похоже, не работает -->
         <bitmap
                 android:src="@drawable/splash"
                 android:gravity="center"
