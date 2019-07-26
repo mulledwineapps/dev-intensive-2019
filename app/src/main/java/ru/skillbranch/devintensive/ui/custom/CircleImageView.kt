@@ -89,7 +89,7 @@ open class CircleImageView @JvmOverloads constructor(
     fun getBorderWidth(): Int = borderWidth.roundToInt()
 
     fun setBorderWidth(@Dimension dp: Int) {
-        borderWidth = dp * resources.displayMetrics.density
+        borderWidth = dp.toFloat() // * resources.displayMetrics.density
         this.invalidate()
     }
 
