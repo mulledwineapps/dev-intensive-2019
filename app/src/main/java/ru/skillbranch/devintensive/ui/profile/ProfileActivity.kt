@@ -1,12 +1,12 @@
 package ru.skillbranch.devintensive.ui.profile
 
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_profile_constraint.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
+
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -29,9 +30,7 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var viewFields: Map<String, TextView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // set custom Theme this before super and setContentView
         setTheme(R.style.AppTheme)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         initViews(savedInstanceState)
@@ -61,11 +60,8 @@ class ProfileActivity : AppCompatActivity() {
             for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
+            iv_avatar.setImageDrawable(getDrawableWithText(it["initials"].toString()))
         }
-
-        val firstName = et_first_name.text.toString().trim()
-        val lastName = et_last_name.text.toString().trim()
-        iv_avatar.setInitials(firstName, lastName)
     }
 
     private fun initViews(savedInstanceState: Bundle?) {
@@ -83,18 +79,6 @@ class ProfileActivity : AppCompatActivity() {
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
         showCurrentMode(isEditMode)
 
-        // btn_edit.setOnClickListener(object : View.OnClickListener {
-        //     override fun onClick(v: View?) {
-        //         isEditMode = isEditMode.not()
-        //         showCurrentMode(isEditMode)
-        //     }
-        // })
-
-        // btn_edit.setOnClickListener(View.OnClickListener {
-        //     isEditMode = isEditMode.not()
-        //     showCurrentMode(isEditMode)
-        // })
-
         btn_edit.setOnClickListener {
             if (isEditMode) {
                 if (!isRepositoryValid(et_repository.text.toString())) {
@@ -105,14 +89,6 @@ class ProfileActivity : AppCompatActivity() {
             switchMode()
         }
 
-        // et_repository.setOnFocusChangeListener { _, hasFocus ->
-        //     if (hasFocus.not()) {
-        //         if (!isRepositoryValid(et_repository.text.toString())) {
-        //             wr_repository.error = "Невалидный адрес репозитория"
-        //         }
-        //     }
-        // }
-
         et_repository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (isRepositoryValid(s.toString())) {
@@ -122,6 +98,7 @@ class ProfileActivity : AppCompatActivity() {
                     wr_repository.error = "Невалидный адрес репозитория"
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -151,17 +128,10 @@ class ProfileActivity : AppCompatActivity() {
 
         wr_repository.isErrorEnabled = isEdit
 
-        // https://stackoverflow.com/questions/13719103/how-to-retrieve-style-attributes-programmatically-from-styles-xml
-        val a = obtainStyledAttributes(R.style.AppTheme, intArrayOf(android.R.attr.colorAccent))
-        val colorAccent: Int = a.getColor(0, resources.getColor(R.color.color_accent, theme))
-        a.recycle()
-
-        iv_avatar.setAvatarBackgroundColor(colorAccent)
-
         with(btn_edit) {
             val filter: ColorFilter? = if (isEdit) {
                 PorterDuffColorFilter(
-                    colorAccent,
+                    getThemeAccentColor(),
                     PorterDuff.Mode.SRC_IN // режим наложения
                 )
             } else {
@@ -180,7 +150,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun isRepositoryValid(text: String): Boolean {
-
         // a*a+a?	0 or more, 1 or more, 0 or 1
         // .        any character except newline
         // \w\d\s	word, digit, whitespace
@@ -215,6 +184,35 @@ class ProfileActivity : AppCompatActivity() {
         ).apply {
             viewModel.saveProfileDate(this)
         } // apply - для того, чтобы обратиться к только что созданному инстансу Profile
+    }
+
+    private fun getDrawableWithText(text: String): BitmapDrawable {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.textSize = 48f
+        paint.color = Color.WHITE
+        paint.textAlign = Paint.Align.CENTER
+
+        val image = Bitmap.createBitmap(112, 112, Bitmap.Config.ARGB_8888)
+
+        image.eraseColor(getThemeAccentColor())
+        val canvas = Canvas(image)
+
+        val textBounds = Rect()
+        paint.getTextBounds(text, 0, text.length, textBounds)
+
+        val backgroundBounds = RectF()
+        backgroundBounds.set(0f, 0f, 112f, 112f)
+
+        val textBottom = backgroundBounds.centerY() - textBounds.exactCenterY()
+        canvas.drawText(text, backgroundBounds.centerX(), textBottom, paint)
+
+        return BitmapDrawable(resources, image)
+    }
+
+    private fun getThemeAccentColor(): Int {
+        val value = TypedValue()
+        theme.resolveAttribute(R.attr.colorAccent, value, true)
+        return value.data
     }
 
 // мультиселект:

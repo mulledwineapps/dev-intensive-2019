@@ -8,21 +8,10 @@
     <attr name="colorDivider" format="reference"/>
     <attr name="colorIcon" format="reference"/>
 
-    <declare-styleable name="BaseCircleImageView">
+    <declare-styleable name="CircleImageView">
         <attr name="cv_borderColor" format="color"/>
         <attr name="cv_borderWidth" format="dimension"/>
         <attr name="highlightEnable" format="boolean"/>
         <attr name="highlightColor" format="color"/>
-    </declare-styleable>
-
-    <declare-styleable name="CircleImageView">
-        <attr name="avatarBackgroundColor" format="color"/>
-        <attr name="textSize" format="dimension"/>
-        <attr name="textColor" format="color"/>
-        <attr name="text" format="string"/>
-        <attr name="view_state" format="enum">
-            <enum name="INITIAL" value="1"/>
-            <enum name="IMAGE" value="2"/>
-        </attr>
     </declare-styleable>
 </resources>
