@@ -117,6 +117,7 @@ class ProfileActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (isRepositoryValid(s.toString())) {
                     wr_repository.error = null
+                    wr_repository.isErrorEnabled = false
                 } else {
                     wr_repository.error = "Невалидный адрес репозитория"
                 }

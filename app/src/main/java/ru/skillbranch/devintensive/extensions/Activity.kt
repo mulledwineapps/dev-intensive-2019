@@ -25,12 +25,10 @@ fun Activity.isKeyboardClosed() : Boolean = this.isKeyboardOpen().not()
 // https://github.com/ravindu1024/android-keyboardlistener/blob/master/keyboard-listener/src/main/java/com/rw/keyboardlistener/KeyboardUtils.java
 fun Activity.isKeyboardOpen(): Boolean {
     val rootView = this.findViewById(android.R.id.content) as ViewGroup
-    val screenDensity = this.resources.displayMetrics.density
 
-    val r = Rect()
-    rootView.getWindowVisibleDisplayFrame(r)
+    val visibleBounds = Rect()
+    rootView.getWindowVisibleDisplayFrame(visibleBounds)
 
-    val heightDiff = rootView.rootView.height - (r.bottom - r.top)
-    val dp = heightDiff / screenDensity
-    return dp > 200
+    val heightDiff = rootView.rootView.height - (visibleBounds.bottom - visibleBounds.top)
+    return heightDiff > 50.dpToPx()
 }
