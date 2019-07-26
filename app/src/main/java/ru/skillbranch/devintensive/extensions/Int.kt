@@ -5,6 +5,8 @@ import android.util.TypedValue
 
 fun Int.pxToDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 
+// (px / scale + 0.5f).toInt()
+
 fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 //fun dp2px(value: Float, context: Context) =

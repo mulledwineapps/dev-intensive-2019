@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.dpToPx
+import ru.skillbranch.devintensive.extensions.pxToDp
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -31,7 +32,7 @@ open class BaseCircleImageView @JvmOverloads constructor(
 ) : ImageView(context, attrs, defStyleAttr) {
 
     companion object {
-        private const val DEFAULT_BORDER_COLOR = Color.WHITE
+        private const val DEFAULT_BORDER_COLOR: Int = Color.WHITE
         private val DEFAULT_BORDER_WIDTH = 2.dpToPx()
         private const val DEFAULT_HIGHLIGHT_COLOR = 0x32000000
         private const val DEFAULT_HIGHLIGHT_ENABLE = true
@@ -57,11 +58,11 @@ open class BaseCircleImageView @JvmOverloads constructor(
     private var initialized: Boolean = true
     private var pPressed: Boolean = false
 
-    // TODO использовать этот класс, а не аватар?
-
     init {
+        // getDimensionPixelSize: Retrieve a dimensional unit attribute for use as a size in raw pixels!!
+
         if (attrs != null) {
-            val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
+            val a = context.obtainStyledAttributes(attrs, R.styleable.BaseCircleImageView)
             borderColor = a.getColor(R.styleable.BaseCircleImageView_cv_borderColor, DEFAULT_BORDER_COLOR)
             borderWidth = a.getDimensionPixelSize(R.styleable.BaseCircleImageView_cv_borderWidth, DEFAULT_BORDER_WIDTH)
             highlightEnable = a.getBoolean(R.styleable.BaseCircleImageView_highlightEnable, DEFAULT_HIGHLIGHT_ENABLE)
@@ -79,23 +80,24 @@ open class BaseCircleImageView @JvmOverloads constructor(
         setupBitmap()
     }
 
-    fun getBorderWidth(): Int = borderWidth
+    fun getBorderWidth(): Int = borderWidth.pxToDp()
 
     fun setBorderWidth(dp: Int) {
         borderWidth = dp.dpToPx()
+        this.invalidate()
     }
 
-    fun getBorderColor(): Int {
-        return 0
-    }
+    fun getBorderColor(): Int = borderColor
 
     fun setBorderColor(hex: String) {
         // val strColor = String.format("#%06X", 0xFFFFFF & color)
         borderColor = Color.parseColor(hex)
+        this.invalidate()
     }
 
     fun setBorderColor(@ColorRes colorId: Int) {
         borderColor = ContextCompat.getColor(App.applicationContext(), colorId)
+        this.invalidate()
     }
 
     override fun setImageResource(resId: Int) {
@@ -159,7 +161,7 @@ open class BaseCircleImageView @JvmOverloads constructor(
         drawHighlight(canvas)
     }
 
-    protected fun drawBitmap(canvas: Canvas?) {
+    private fun drawBitmap(canvas: Canvas?) {
         canvas?.drawOval(bitmapDrawBounds, bitmapPaint)
     }
 

@@ -158,7 +158,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun isRepositoryValid(): Boolean {
-        val repository = et_repository.text.toString().trim()
+        val repository = et_repository.text.toString().trim().toLowerCase()
 
         if (repository.isEmpty()) return true
 
