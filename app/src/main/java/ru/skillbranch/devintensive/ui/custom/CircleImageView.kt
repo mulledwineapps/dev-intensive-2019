@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.ui.custom
 
 import android.annotation.TargetApi
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -9,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -19,6 +21,8 @@ import androidx.annotation.Dimension
 import androidx.core.content.ContextCompat
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
+import ru.skillbranch.devintensive.extensions.pxToSp
+import ru.skillbranch.devintensive.extensions.spToPx
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -167,19 +171,19 @@ open class CircleImageView @JvmOverloads constructor(
         canvas?.drawOval(bitmapDrawBounds, bitmapPaint)
     }
 
-    protected fun drawStroke(canvas: Canvas?) {
+    private fun drawStroke(canvas: Canvas?) {
         if (strokePaint.strokeWidth > 0f) {
             canvas?.drawOval(strokeBounds, strokePaint)
         }
     }
 
-    protected fun drawHighlight(canvas: Canvas?) {
+    private fun drawHighlight(canvas: Canvas?) {
         if (highlightEnable && pPressed) {
             canvas?.drawOval(bitmapDrawBounds, pressedPaint)
         }
     }
 
-    protected fun updateCircleDrawBounds(bounds: RectF) {
+    private fun updateCircleDrawBounds(bounds: RectF) {
         val contentWidth = width - paddingLeft - paddingRight
         val contentHeight = height - paddingTop - paddingBottom
 
@@ -264,5 +268,33 @@ open class CircleImageView @JvmOverloads constructor(
             outline?.setOval(rect)
         }
 
+    }
+
+    fun setDefaultAvatar(text: String, theme: Resources.Theme) {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        // @param textSize set the paint's text size in pixel units.
+        paint.textSize = 48f.spToPx()
+        paint.color = Color.WHITE
+        paint.textAlign = Paint.Align.CENTER
+
+        val image = Bitmap.createBitmap(layoutParams.width, layoutParams.height, Bitmap.Config.ARGB_8888)
+
+        val color = TypedValue()
+        theme.resolveAttribute(R.attr.colorAccent, color, true)
+
+        val canvas = Canvas(image)
+        canvas.drawColor(color.data)
+
+        val textBounds = Rect()
+        paint.getTextBounds(text, 0, text.length, textBounds)
+
+        val backgroundBounds = RectF()
+        backgroundBounds.set(0f, 0f, layoutParams.width.toFloat(), layoutParams.height.toFloat())
+
+        val textBottom = backgroundBounds.centerY() - textBounds.exactCenterY()
+        canvas.drawText(text, backgroundBounds.centerX(), textBottom, paint)
+
+        // setImageDrawable(BitmapDrawable(resources, image))
+        setImageBitmap(image)
     }
 }

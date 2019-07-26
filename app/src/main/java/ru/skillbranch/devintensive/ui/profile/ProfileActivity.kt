@@ -1,7 +1,6 @@
 package ru.skillbranch.devintensive.ui.profile
 
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,7 +26,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ProfileViewModel
     var isEditMode = false
-    lateinit var viewFields: Map<String, TextView>
+    private lateinit var viewFields: Map<String, TextView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -60,7 +59,7 @@ class ProfileActivity : AppCompatActivity() {
             for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
-            iv_avatar.setImageDrawable(getDrawableWithText(it["initials"].toString()))
+            iv_avatar.setDefaultAvatar(it["initials"].toString(), theme)
         }
     }
 
@@ -98,7 +97,6 @@ class ProfileActivity : AppCompatActivity() {
                     wr_repository.error = "Невалидный адрес репозитория"
                 }
             }
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -125,7 +123,6 @@ class ProfileActivity : AppCompatActivity() {
 
         ic_eye.visibility = if (isEdit) View.GONE else View.VISIBLE
         wr_about.isCounterEnabled = isEdit // подсветка количества введённых символов
-
         wr_repository.isErrorEnabled = isEdit
 
         with(btn_edit) {
@@ -184,29 +181,6 @@ class ProfileActivity : AppCompatActivity() {
         ).apply {
             viewModel.saveProfileDate(this)
         } // apply - для того, чтобы обратиться к только что созданному инстансу Profile
-    }
-
-    private fun getDrawableWithText(text: String): BitmapDrawable {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.textSize = 48f
-        paint.color = Color.WHITE
-        paint.textAlign = Paint.Align.CENTER
-
-        val image = Bitmap.createBitmap(112, 112, Bitmap.Config.ARGB_8888)
-
-        image.eraseColor(getThemeAccentColor())
-        val canvas = Canvas(image)
-
-        val textBounds = Rect()
-        paint.getTextBounds(text, 0, text.length, textBounds)
-
-        val backgroundBounds = RectF()
-        backgroundBounds.set(0f, 0f, 112f, 112f)
-
-        val textBottom = backgroundBounds.centerY() - textBounds.exactCenterY()
-        canvas.drawText(text, backgroundBounds.centerX(), textBottom, paint)
-
-        return BitmapDrawable(resources, image)
     }
 
     private fun getThemeAccentColor(): Int {
