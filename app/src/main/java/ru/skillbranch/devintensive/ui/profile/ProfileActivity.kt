@@ -4,6 +4,8 @@ import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -11,7 +13,20 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.activity_profile.btn_edit
+import kotlinx.android.synthetic.main.activity_profile.btn_switch_theme
+import kotlinx.android.synthetic.main.activity_profile.et_about
+import kotlinx.android.synthetic.main.activity_profile.et_first_name
+import kotlinx.android.synthetic.main.activity_profile.et_last_name
+import kotlinx.android.synthetic.main.activity_profile.et_repository
+import kotlinx.android.synthetic.main.activity_profile.ic_eye
+import kotlinx.android.synthetic.main.activity_profile.iv_avatar
+import kotlinx.android.synthetic.main.activity_profile.tv_nick_name
+import kotlinx.android.synthetic.main.activity_profile.tv_rank
+import kotlinx.android.synthetic.main.activity_profile.tv_rating
+import kotlinx.android.synthetic.main.activity_profile.tv_respect
+import kotlinx.android.synthetic.main.activity_profile.wr_about
+import kotlinx.android.synthetic.main.activity_profile.wr_repository
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
@@ -95,16 +110,33 @@ class ProfileActivity : AppCompatActivity() {
 
         btn_edit.setOnClickListener {
             if (isEditMode) {
-                if (isRepositoryValid()) {
-                    wr_repository.error = ""
-                    saveProfileInfo()
-                    switchMode()
-                } else {
-                    wr_repository.error = "Невалидный адрес репозитория"
+                if (!isRepositoryValid(et_repository.text.toString())) {
                     et_repository.text.clear()
                 }
-            } else switchMode()
+                saveProfileInfo()
+            }
+            switchMode()
         }
+
+        // et_repository.setOnFocusChangeListener { _, hasFocus ->
+        //     if (hasFocus.not()) {
+        //         if (!isRepositoryValid(et_repository.text.toString())) {
+        //             wr_repository.error = "Невалидный адрес репозитория"
+        //         }
+        //     }
+        // }
+
+        et_repository.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (isRepositoryValid(s.toString())) {
+                    wr_repository.error = null
+                } else {
+                    wr_repository.error = "Невалидный адрес репозитория"
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
         btn_switch_theme.setOnClickListener {
             viewModel.switchTheme()
@@ -128,6 +160,8 @@ class ProfileActivity : AppCompatActivity() {
 
         ic_eye.visibility = if (isEdit) View.GONE else View.VISIBLE
         wr_about.isCounterEnabled = isEdit // подсветка количества введённых символов
+
+        wr_repository.isErrorEnabled = isEdit
 
         // https://stackoverflow.com/questions/13719103/how-to-retrieve-style-attributes-programmatically-from-styles-xml
         val a = obtainStyledAttributes(R.style.AppTheme, intArrayOf(android.R.attr.colorAccent))
@@ -157,20 +191,31 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun isRepositoryValid(): Boolean {
-        val repository = et_repository.text.toString().trim().toLowerCase()
+    private fun isRepositoryValid(text: String): Boolean {
 
-        if (repository.isEmpty()) return true
+        // a*a+a?	0 or more, 1 or more, 0 or 1
+        // .        any character except newline
+        // \w\d\s	word, digit, whitespace
+        // \W\D\S	not word, digit, whitespace
 
-        val pattern = "^(https://)?(www.)?github.com/[\\w\\d]+$"
+        val repository = text.trim().toLowerCase()
+        val userName = repository.substringAfterLast('/')
+
+        val pattern = "^(https://)?(www.)?github.com/[\\w\\d-]+$"
 
         val exclude = arrayOf(
             "enterprise", "features", "topics", "collections", "trending", "events", "marketplace",
             "pricing", "nonprofit", "customer-stories", "security", "login", "join"
         )
-        val lastWord = repository.substringAfterLast('/')
 
-        return !exclude.contains(lastWord) && Regex(pattern).matches(repository)
+        return when {
+            repository.isEmpty() -> true
+            Regex(pattern).matches(repository).not() -> false
+            exclude.contains(userName) -> false
+            userName.contains(Regex("^a-zA-Z0-9-")) -> false
+            userName.startsWith("-") || userName.endsWith("-") -> false
+            else -> true
+        }
     }
 
     private fun saveProfileInfo() {
