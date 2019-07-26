@@ -25,7 +25,7 @@ class CircleImageView @JvmOverloads constructor(
 
         private const val DEFAULT_INITIALS = ""
         private const val DEFAULT_TEXT_COLOR = Color.WHITE
-        private const val DEFAULT_TEXT_SIZE = 48
+        private const val DEFAULT_TEXT_SIZE = 48f
 
         @State
         private val DEFAULT_STATE = SHOW_INITIAL
@@ -78,7 +78,7 @@ class CircleImageView @JvmOverloads constructor(
             val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyleAttr, 0)
             initials = a.getString(R.styleable.CircleImageView_text) ?: DEFAULT_INITIALS
             textColor = a.getColor(R.styleable.CircleImageView_textColor, DEFAULT_TEXT_COLOR)
-            textSize = a.getDimensionPixelSize(R.styleable.CircleImageView_textSize, DEFAULT_TEXT_SIZE)
+            textSize = a.getDimension(R.styleable.CircleImageView_textSize, DEFAULT_TEXT_SIZE)
             pBackgroundColor = a.getColor(R.styleable.CircleImageView_avatarBackgroundColor, pBackgroundColor)
             showState = a.getInt(R.styleable.CircleImageView_view_state, DEFAULT_STATE)
 
@@ -87,7 +87,7 @@ class CircleImageView @JvmOverloads constructor(
 
         textPaint.textAlign = Paint.Align.CENTER
         textPaint.color = textColor
-        textPaint.textSize = textSize.spToPx()
+        textPaint.textSize = textSize
 
         updateTextBounds()
 
@@ -114,10 +114,10 @@ class CircleImageView @JvmOverloads constructor(
     }
 
     @Dimension
-    fun getTextSize() = textPaint.textSize.pxToSp()
+    fun getTextSize() = textPaint.textSize
 
     fun setTextSize(@Dimension size: Float) {
-        textPaint.textSize = size.spToPx()
+        textPaint.textSize = size
         updateTextBounds()
         invalidate()
     }
