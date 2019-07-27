@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -21,7 +20,7 @@ import androidx.annotation.Dimension
 import androidx.core.content.ContextCompat
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
-import ru.skillbranch.devintensive.extensions.pxToSp
+import ru.skillbranch.devintensive.extensions.dpToPx
 import ru.skillbranch.devintensive.extensions.spToPx
 import kotlin.math.min
 import kotlin.math.pow
@@ -37,13 +36,13 @@ open class CircleImageView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_BORDER_COLOR: Int = Color.WHITE
-        private const val DEFAULT_BORDER_WIDTH = 2f
+        private const val DEFAULT_BORDER_WIDTH = 2
         private const val DEFAULT_HIGHLIGHT_COLOR = 0x32000000
         private const val DEFAULT_HIGHLIGHT_ENABLE = true
     }
 
     private var borderColor = DEFAULT_BORDER_COLOR
-    private var borderWidth: Float = DEFAULT_BORDER_WIDTH
+    private var borderWidth: Float = DEFAULT_BORDER_WIDTH.dpToPx()
     private var highlightColor = DEFAULT_HIGHLIGHT_COLOR
     private var highlightEnable: Boolean = DEFAULT_HIGHLIGHT_ENABLE
 
@@ -68,10 +67,10 @@ open class CircleImageView @JvmOverloads constructor(
 
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
-            borderColor = a.getColor(R.styleable.CircleImageView_cv_borderColor, DEFAULT_BORDER_COLOR)
-            borderWidth = a.getDimension(R.styleable.CircleImageView_cv_borderWidth, DEFAULT_BORDER_WIDTH)
-            highlightEnable = a.getBoolean(R.styleable.CircleImageView_highlightEnable, DEFAULT_HIGHLIGHT_ENABLE)
-            highlightColor = a.getColor(R.styleable.CircleImageView_highlightColor, DEFAULT_HIGHLIGHT_COLOR)
+            borderColor = a.getColor(R.styleable.CircleImageView_cv_borderColor, borderColor)
+            borderWidth = a.getDimension(R.styleable.CircleImageView_cv_borderWidth, borderWidth)
+            highlightColor = a.getColor(R.styleable.CircleImageView_highlightColor, highlightColor)
+            highlightEnable = a.getBoolean(R.styleable.CircleImageView_highlightEnable, highlightEnable)
             a.recycle()
         }
 
@@ -89,7 +88,7 @@ open class CircleImageView @JvmOverloads constructor(
     fun getBorderWidth(): Int = borderWidth.roundToInt()
 
     fun setBorderWidth(@Dimension dp: Int) {
-        borderWidth = dp.toFloat() // * resources.displayMetrics.density
+        borderWidth = dp.toFloat()
         this.invalidate()
     }
 
