@@ -12,7 +12,7 @@ object Utils {
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
-        val divided = Regex("[^a-zA-Zа-яА-я0-9]+").replace(payload.trim(), divider)
+        val divided = Regex("[^a-zA-Zа-яА-яЁё0-9]+").replace(payload.trim(), divider)
 
         return buildString {
             for (i in 0 until divided.length) {

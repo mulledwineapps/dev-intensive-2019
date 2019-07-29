@@ -59,7 +59,7 @@ class ProfileActivity : AppCompatActivity() {
             for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
-            iv_avatar.setDefaultAvatar(it["initials"].toString(), theme)
+            iv_avatar.setDefaultAvatar(it["initials"].toString(), getThemeAccentColor())
         }
     }
 

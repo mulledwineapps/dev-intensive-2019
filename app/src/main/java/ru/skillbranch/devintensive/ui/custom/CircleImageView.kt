@@ -2,13 +2,13 @@ package ru.skillbranch.devintensive.ui.custom
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -52,6 +52,7 @@ open class CircleImageView @JvmOverloads constructor(
     private var bitmapDrawBounds: RectF = RectF()
     private var strokeBounds: RectF = RectF()
 
+    private var text: String = ""
     private var bitmap: Bitmap? = null
 
     private var bitmapPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -182,6 +183,25 @@ open class CircleImageView @JvmOverloads constructor(
         }
     }
 
+    private fun drawText(canvas: Canvas, text: String) {
+        if (text.isNotEmpty()) {
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            // @param textSize set the paint's text size in pixel units.
+            paint.textSize = 48f.spToPx()
+            paint.color = Color.WHITE
+            paint.textAlign = Paint.Align.CENTER
+
+            val textBounds = Rect()
+            paint.getTextBounds(text, 0, text.length, textBounds)
+
+            val backgroundBounds = RectF()
+            backgroundBounds.set(0f, 0f, layoutParams.width.toFloat(), layoutParams.height.toFloat())
+
+            val textBottom = backgroundBounds.centerY() - textBounds.exactCenterY()
+            canvas.drawText(text, backgroundBounds.centerX(), textBottom, paint)
+        }
+    }
+
     private fun updateCircleDrawBounds(bounds: RectF) {
         val contentWidth = width - paddingLeft - paddingRight
         val contentHeight = height - paddingTop - paddingBottom
@@ -204,16 +224,15 @@ open class CircleImageView @JvmOverloads constructor(
     private fun setupBitmap() {
         if (initialized.not() || drawable == null) return
         bitmap = getBitmapFromDrawable(drawable)
-        val bm = bitmap ?: return
 
-        bitmapShader = BitmapShader(bm, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        bitmapShader = BitmapShader(bitmap!!, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         bitmapPaint.shader = bitmapShader
 
         updateBitmapSize()
     }
 
     private fun updateBitmapSize() {
-        val bm = bitmap ?: return
+        val bm = bitmap!!
 
         val scale: Float
         val dx: Float
@@ -266,34 +285,22 @@ open class CircleImageView @JvmOverloads constructor(
         override fun getOutline(view: View?, outline: Outline?) {
             outline?.setOval(rect)
         }
-
     }
 
-    fun setDefaultAvatar(text: String, theme: Resources.Theme) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        // @param textSize set the paint's text size in pixel units.
-        paint.textSize = 48f.spToPx()
-        paint.color = Color.WHITE
-        paint.textAlign = Paint.Align.CENTER
+    fun setDefaultAvatar(text: String, @ColorInt color: Int) {
+        if (bitmap == null || this.text != text) {
+            val image = Bitmap.createBitmap(layoutParams.width, layoutParams.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(image)
 
-        val image = Bitmap.createBitmap(layoutParams.width, layoutParams.height, Bitmap.Config.ARGB_8888)
+            canvas.drawColor(color)
+            drawText(canvas, text)
 
-        val color = TypedValue()
-        theme.resolveAttribute(R.attr.colorAccent, color, true)
+            this.text = text
+            bitmap = image
+            setImageBitmap(image)
+            invalidate()
 
-        val canvas = Canvas(image)
-        canvas.drawColor(color.data)
-
-        val textBounds = Rect()
-        paint.getTextBounds(text, 0, text.length, textBounds)
-
-        val backgroundBounds = RectF()
-        backgroundBounds.set(0f, 0f, layoutParams.width.toFloat(), layoutParams.height.toFloat())
-
-        val textBottom = backgroundBounds.centerY() - textBounds.exactCenterY()
-        canvas.drawText(text, backgroundBounds.centerX(), textBottom, paint)
-
-        // setImageDrawable(BitmapDrawable(resources, image))
-        setImageBitmap(image)
+            Log.d("M_CircleImageView", "Default avatar has been set")
+        }
     }
 }

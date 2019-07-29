@@ -14,7 +14,7 @@ import ru.skillbranch.devintensive.models.Profile
 
 object PreferencesRepository {
 
-    // ctrl + shift + U - перевод в верхний регистр
+    // ctrl + shift + U - перевод в нижний/верхний регистр
     private const val FIRST_NAME = "FIRST_NAME"
     private const val LAST_NAME = "LAST_NAME"
     private const val ABOUT = "ABOUT"
