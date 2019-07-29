@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -51,6 +50,9 @@ open class CircleImageView @JvmOverloads constructor(
 
     private var bitmapDrawBounds: RectF = RectF()
     private var strokeBounds: RectF = RectF()
+    private var backgroundBounds = RectF()
+
+    private var textBounds = Rect()
 
     private var text: String = ""
     private var bitmap: Bitmap? = null
@@ -58,6 +60,7 @@ open class CircleImageView @JvmOverloads constructor(
     private var bitmapPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var strokePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var pressedPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var textPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var initialized: Boolean = true
     private var pPressed: Boolean = false
@@ -81,6 +84,11 @@ open class CircleImageView @JvmOverloads constructor(
 
         pressedPaint.color = highlightColor
         pressedPaint.style = Paint.Style.FILL
+
+        // @param textSize set the paint's text size in pixel units.
+        textPaint.textSize = 48f.spToPx()
+        textPaint.color = Color.WHITE
+        textPaint.textAlign = Paint.Align.CENTER
 
         setupBitmap()
     }
@@ -185,20 +193,11 @@ open class CircleImageView @JvmOverloads constructor(
 
     private fun drawText(canvas: Canvas, text: String) {
         if (text.isNotEmpty()) {
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-            // @param textSize set the paint's text size in pixel units.
-            paint.textSize = 48f.spToPx()
-            paint.color = Color.WHITE
-            paint.textAlign = Paint.Align.CENTER
-
-            val textBounds = Rect()
-            paint.getTextBounds(text, 0, text.length, textBounds)
-
-            val backgroundBounds = RectF()
+            textPaint.getTextBounds(text, 0, text.length, textBounds)
             backgroundBounds.set(0f, 0f, layoutParams.width.toFloat(), layoutParams.height.toFloat())
 
             val textBottom = backgroundBounds.centerY() - textBounds.exactCenterY()
-            canvas.drawText(text, backgroundBounds.centerX(), textBottom, paint)
+            canvas.drawText(text, backgroundBounds.centerX(), textBottom, textPaint)
         }
     }
 
@@ -288,6 +287,9 @@ open class CircleImageView @JvmOverloads constructor(
     }
 
     fun setDefaultAvatar(text: String, @ColorInt color: Int) {
+        // Log.d("M_CircleImageView","drawable is${if (drawable == null) "" else " not"} null")
+        // Log.d("M_CircleImageView","bitmap is${if (bitmap == null) "" else " not"} null")
+
         if (bitmap == null || this.text != text) {
             val image = Bitmap.createBitmap(layoutParams.width, layoutParams.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(image)
