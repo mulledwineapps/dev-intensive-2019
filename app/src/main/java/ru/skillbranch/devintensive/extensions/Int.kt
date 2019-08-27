@@ -3,7 +3,7 @@ package ru.skillbranch.devintensive.extensions
 import android.content.res.Resources
 import kotlin.math.roundToInt
 
-fun Int.pxToDp(): Float = this / Resources.getSystem().displayMetrics.density
+fun Int.pxToDp(): Int = (this / Resources.getSystem().displayMetrics.density).roundToInt()
 
 // (px / scale + 0.5f).toInt()
 

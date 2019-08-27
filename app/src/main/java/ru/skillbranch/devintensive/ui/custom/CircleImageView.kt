@@ -170,6 +170,7 @@ open class CircleImageView @JvmOverloads constructor(
 
     //  onDraw will be called automatically by the framework when we call invalidate() or when it needs to be redrawn.
     override fun onDraw(canvas: Canvas?) {
+        Log.d("M_CircleImageView","onDraw")
         drawBitmap(canvas)
         drawStroke(canvas)
         drawHighlight(canvas)
@@ -231,6 +232,7 @@ open class CircleImageView @JvmOverloads constructor(
     }
 
     private fun updateBitmapSize() {
+        bitmap ?: return
         val bm = bitmap!!
 
         val scale: Float

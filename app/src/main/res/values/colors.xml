@@ -14,4 +14,6 @@
     <color name="color_divider_light">#1FFFFFFF</color>
 
     <color name="default_border_color">#FFFFFF</color>
+    <color name="color_indicator">#581F99</color>
+    <color name="color_green">#4FD149</color>
 </resources>
