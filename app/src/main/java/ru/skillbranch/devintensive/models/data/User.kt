@@ -27,6 +27,7 @@ data class User(
             Utils.toInitials(firstName, lastName),
             avatar,
             lastActivity,
+            false,
             isOnline
         )
     }

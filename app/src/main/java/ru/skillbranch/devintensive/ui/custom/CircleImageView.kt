@@ -170,7 +170,7 @@ open class CircleImageView @JvmOverloads constructor(
 
     //  onDraw will be called automatically by the framework when we call invalidate() or when it needs to be redrawn.
     override fun onDraw(canvas: Canvas?) {
-        Log.d("M_CircleImageView","onDraw")
+        // Log.d("M_CircleImageView","onDraw")
         drawBitmap(canvas)
         drawStroke(canvas)
         drawHighlight(canvas)
@@ -304,7 +304,7 @@ open class CircleImageView @JvmOverloads constructor(
             setImageBitmap(image)
             invalidate()
 
-            Log.d("M_CircleImageView", "Default avatar has been set")
+            // Log.d("M_CircleImageView", "Default avatar has been set")
         }
     }
 }

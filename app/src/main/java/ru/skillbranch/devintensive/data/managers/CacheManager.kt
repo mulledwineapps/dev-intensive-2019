@@ -19,7 +19,10 @@ object CacheManager {
     }
 
     fun nextChatId(): String {
-        return "${chats.value!!.size}"
+        // return "${chats.value!!.size}"
+        // Идентификатор нового чата должен задаваться как инкремент от последнего идентификатора в списке чатов
+        val lastId = chats.value!!.last().id.toInt() + 1
+        return lastId.toString()
     }
 
     fun insertChat(chat: Chat) {

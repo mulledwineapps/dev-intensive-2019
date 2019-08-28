@@ -39,9 +39,13 @@ class MainActivity : AppCompatActivity() {
         }
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         // если лямбда является последним аргументом, мы можем вынести её за скобки
-        val touchCallback = ChatItemTouchHelperCallback(chatAdapter) {
-            viewModel.addToArchive(it.id)
-            Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG).show()
+        val touchCallback = ChatItemTouchHelperCallback(chatAdapter) { chatItem ->
+            viewModel.addToArchive(chatItem.id)
+            Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${chatItem.title} в архив?", Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_undo) {
+                    viewModel.restoreFromArchive(chatItem.id)
+                }
+                .show()
         }
         val touchHelper = ItemTouchHelper(touchCallback)
         touchHelper.attachToRecyclerView(rv_chat_list)
