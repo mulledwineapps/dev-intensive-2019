@@ -10,6 +10,15 @@
     <color name="color_gray_dark">#675F7F</color>
     <color name="color_gray_light">#ECECEC</color>
 
+    <color name="color_item">#FFFFFF</color>
+    <color name="color_item_night">#1D1D1D</color>
+
+    <color name="cod_gray">#121212</color>
+    <color name="mine_shaft">#272727</color>
+    <color name="alabaster">#FAFAFA</color>
+
+    <color name="silver_alpha_100">#CCCCCC</color>
+
     <color name="color_divider_dark">#1F000000</color>
     <color name="color_divider_light">#1FFFFFFF</color>
 

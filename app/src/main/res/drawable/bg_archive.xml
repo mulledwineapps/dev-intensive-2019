@@ -2,9 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="?attr/colorIndicator"/>
-            <stroke android:width="2dp"
-                    android:color="@android:color/white"/>
+            <solid android:color="?attr/colorArchiveIconBackground"/>
         </shape>
     </item>
 </selector>

@@ -8,10 +8,24 @@
     <attr name="colorDivider" format="reference"/>
     <attr name="colorIcon" format="reference"/>
 
+    <attr name="colorSwipeBackground" format="color"/>
+    <attr name="colorItem" format="color"/>
+    <attr name="colorItemSelected" format="color"/>
+    <attr name="colorTextItemTitle" format="color"/>
+    <attr name="colorTextItemDescription" format="color"/>
+    <attr name="colorCounter" format="color"/>
+    <attr name="colorIndicator" format="color"/>
+    <attr name="colorSnackbarText" format="color"/>
+    <attr name="colorToolbar" format="color"/>
+    <attr name="chipCloseIconTint" format="color"/>
+    <attr name="colorIconSelected" format="color"/>
+    <attr name="colorArchiveIconBackground" format="color"/>
+
     <declare-styleable name="CircleImageView">
         <attr name="cv_borderColor" format="color"/>
         <attr name="cv_borderWidth" format="dimension"/>
         <attr name="highlightEnable" format="boolean"/>
         <attr name="highlightColor" format="color"/>
+        <attr name="cv_textSize" format="dimension"/>
     </declare-styleable>
 </resources>

@@ -14,6 +14,7 @@ abstract class BaseMessage(
 ) {
 
     abstract fun formatMessage(): String
+    abstract fun shortMessage(): String
 
     companion object AbstractFactory {
         private var lastId = -1

@@ -4,10 +4,43 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
 
     <style name="ActivityTransitions" parent="android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/botom_up</item>
+        <item name="android:activityOpenEnterAnimation">@anim/bottom_up</item>
         <item name="android:activityOpenExitAnimation">@anim/idle</item>
         <item name="android:activityCloseEnterAnimation">@anim/idle</item>
         <item name="android:activityCloseExitAnimation">@anim/bottom_down</item>
+    </style>
+
+    <style name="ItemChat"/>
+
+    <style name="ItemChat.Avatar" parent="ItemChat">
+        <item name="cv_borderWidth">0dp</item>
+        <item name="cv_textSize">18sp</item>
+    </style>
+
+    <style name="ItemChat.Layout" parent="ItemChat">
+        <item name="android:background">?attr/colorItem</item>
+        <item name="android:padding">@dimen/spacing_normal_16</item>
+    </style>
+
+    <style name="ItemChat.TextView" parent="ItemChat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    
+    <style name="ItemChat.TextView.Title" parent="ItemChat.TextView">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?attr/colorTextItemTitle</item>
+    </style>
+
+    <style name="ItemChat.TextView.Author" parent="ItemChat.TextView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">?attr/colorTextItemTitle</item>
+    </style>
+
+    <style name="ItemChat.TextView.Description" parent="ItemChat.TextView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">?attr/colorTextItemDescription</item>
     </style>
 
     <style name="Profile">

@@ -9,4 +9,10 @@
             app:actionLayout="@layout/search_view_layout"
             app:showAsAction="ifRoom|collapseActionView"
     />
+
+    <item android:id="@+id/switch_theme_item"
+          android:title="Переключить тему"
+          android:iconTint="@android:color/white"
+          app:showAsAction="ifRoom"
+          android:icon="@drawable/ic_brightness_low_white_24dp"/>
 </menu>

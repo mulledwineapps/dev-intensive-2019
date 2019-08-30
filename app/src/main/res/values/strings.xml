@@ -7,5 +7,8 @@
     <string name="profile_hint_last_name">Фамилия</string>
     <string name="profile_hint_first_name">Имя</string>
     <string name="menu_search_title">Поиск</string>
-    <string name="snackbar_undo">undo</string>
+    <string name="snackbar_undo">Отмена</string>
+    <string name="item_archive_title">Архив чатов</string>
+    <string name="activity_archive_title">Архив чатов</string>
+    <string name="activity_group_title">Создание группы</string>
 </resources>

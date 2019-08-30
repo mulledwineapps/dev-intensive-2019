@@ -7,9 +7,27 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent_night</item>
 
+        <item name="colorSwipeBackground">@color/color_accent_night</item>
+        <item name="colorItem">@color/color_item_night</item>
+        <item name="colorItemSelected">@color/mine_shaft</item>
+        <item name="colorTextItemTitle">@android:color/white</item>
+        <item name="colorTextItemDescription">@color/color_gray</item>
+        <item name="colorCounter">@color/color_gray_dark</item>
+        <item name="colorIndicator">@color/color_accent_night</item>
+        <item name="colorSnackbarText">@color/cod_gray</item>
+        <item name="colorToolbar">@color/mine_shaft</item>
+        <item name="chipCloseIconTint">@color/color_gray</item>
+        <item name="chipBackgroundColor">@color/color_item_night</item>
+        <item name="android:windowBackground">@color/cod_gray</item>
+        <item name="colorIconSelected">@color/color_accent_night</item>
+        <item name="colorArchiveIconBackground">@color/color_gray_dark</item>
+
         <item name="colorAccentedSurface">@color/color_divider_light</item>
-        <item name="colorDivider">@color/color_divider_dark</item>
+        <item name="colorDivider">@color/color_divider_light</item>
         <item name="colorIcon">@android:color/white</item>
         <item name="android:statusBarColor">@android:color/black</item> <!-- толщина статус бара = 24p -->
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
     </style>
 </resources>

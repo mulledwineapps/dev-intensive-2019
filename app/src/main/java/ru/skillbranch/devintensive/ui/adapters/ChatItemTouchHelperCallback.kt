@@ -1,23 +1,25 @@
 package ru.skillbranch.devintensive.ui.adapters
 
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.RectF
-import android.util.Log
+import android.content.res.Resources
+import android.graphics.*
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.ChatItem
+import ru.skillbranch.devintensive.utils.Utils
 
 class ChatItemTouchHelperCallback(
     val adapter: ChatAdapter,
+    @DrawableRes val iconRes: Int,
+    theme: Resources.Theme,
     val swipeListener: (ChatItem) -> Unit
 ) : ItemTouchHelper.Callback() {
 
     private val bgRect = RectF()
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val bgColor = Utils.getThemeColor(R.attr.colorSwipeBackground, theme)
     private val iconBounds = Rect()
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
@@ -70,7 +72,7 @@ class ChatItemTouchHelperCallback(
     }
 
     private fun drawIcon(canvas: Canvas, itemView: View, dX: Float) {
-        val icon = itemView.resources.getDrawable(R.drawable.ic_archive_white_24dp, itemView.context.theme)
+        val icon = itemView.resources.getDrawable(iconRes, itemView.context.theme)
         val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.icon_size)
         val space = itemView.resources.getDimensionPixelSize(R.dimen.spacing_normal_16)
 
@@ -95,7 +97,8 @@ class ChatItemTouchHelperCallback(
         }
 
         with(bgPaint) {
-            color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
+            // color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
+            color = bgColor
         }
 
         // надо будет сделать, чтобы по мере свайпа бэкграунд менял цвет (светлел или вроде того)

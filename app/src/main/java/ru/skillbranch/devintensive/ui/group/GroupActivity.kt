@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.ui.group
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -14,17 +15,24 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.activity_group.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.UserItem
 import ru.skillbranch.devintensive.ui.adapters.UserAdapter
+import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.GroupViewModel
+import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 class GroupActivity : AppCompatActivity() {
 
     private lateinit var userAdapter: UserAdapter
     private lateinit var viewModel: GroupViewModel
+    private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +50,7 @@ class GroupActivity : AppCompatActivity() {
         val searchItem = menu?.findItem(R.id.action_search)
         val searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Введите имя пользователя"
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.handleSearchQuery(query)
                 return true
@@ -58,12 +66,18 @@ class GroupActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == android.R.id.home) {
-            finish()
-            overridePendingTransition(R.anim.idle, R.anim.bottom_down)
-            true
-        } else {
-            super.onOptionsItemSelected(item)
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                finish()
+                // анимация переходов между активностями реализована также через стиль ActivityTransitions
+                overridePendingTransition(R.anim.idle, R.anim.bottom_down)
+                true
+            }
+            R.id.switch_theme_item -> {
+                profileViewModel.switchTheme()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -77,6 +91,8 @@ class GroupActivity : AppCompatActivity() {
             viewModel.handleSelectedItem(it.id)
         }
         val divider = DividerItemDecoration(this, RecyclerView.VERTICAL)
+        divider.setDrawable(resources.getDrawable(R.drawable.item_divider, theme))
+
         with(rv_user_list) {
             adapter = userAdapter
             layoutManager = LinearLayoutManager(this@GroupActivity, RecyclerView.VERTICAL, false)
@@ -97,6 +113,14 @@ class GroupActivity : AppCompatActivity() {
             updateChips(it)
             toggleFab(it.size > 1)
         })
+
+        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        profileViewModel.getTheme().observe(this, Observer { updateTheme(it) })
+    }
+
+    private fun updateTheme(mode: Int) {
+        // при каждом вызове setLocalNightMode происходит пересоздание activity!
+        delegate.setLocalNightMode(mode)
     }
 
     private fun toggleFab(isShow: Boolean) {
@@ -107,14 +131,30 @@ class GroupActivity : AppCompatActivity() {
     private fun addChipToGroup(user: UserItem) {
         val chip = Chip(this).apply {
             text = user.fullName
-            // TODO: задание со * - сделать подгрузку drawable через Glide
-            chipIcon = resources.getDrawable(R.drawable.avatar_default, theme)
             isCloseIconVisible = true
             tag = user.id
-            closeIconTint = ColorStateList.valueOf(Color.WHITE)
-            chipBackgroundColor = ColorStateList.valueOf(getColor(R.color.color_primary_light))
+            closeIconTint = ColorStateList.valueOf(Utils.getThemeColor(R.attr.chipCloseIconTint, theme))
+            chipBackgroundColor = ColorStateList.valueOf(Utils.getThemeColor(R.attr.chipBackgroundColor, theme))
             setTextColor(Color.WHITE)
         }
+
+        val customTarget = object : CustomTarget<Drawable>() {
+            override fun onLoadCleared(placeholder: Drawable?) { }
+
+            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                chip.chipIcon = resource
+            }
+        }
+
+        if (user.avatar != null) {
+            Glide.with(chip)
+                .load(user.avatar)
+                .apply(RequestOptions.circleCropTransform())
+                .into(customTarget)
+        } else {
+            chip.chipIcon = resources.getDrawable(R.drawable.avatar_default, theme)
+        }
+
         chip.setOnCloseIconClickListener { viewModel.handleRemoveChip(it.tag.toString()) }
         chip_group.addView(chip)
     }

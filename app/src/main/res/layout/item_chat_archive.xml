@@ -4,46 +4,51 @@
                 android:layout_width="match_parent" android:layout_height="@dimen/item_size"
                 style="@style/ItemChat.Layout">
 
-    <ru.skillbranch.devintensive.ui.custom.CircleImageView
-            style="@style/ItemChat.Avatar"
-            android:id="@+id/iv_avatar_single"
+    <ImageView
+            android:id="@+id/iv_avatar_archive"
+            android:src="@drawable/ic_archive_white_24dp"
+            android:background="@drawable/bg_archive"
+            android:scaleType="center"
             android:layout_width="@dimen/avatar_item_size"
             android:layout_height="@dimen/avatar_item_size"
-            android:layout_alignParentStart="true"/>
-
-    <View
-            android:id="@+id/sv_indicator"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:background="@drawable/bg_indicator"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@id/tv_title_single"/>
-
-    <TextView
-            style="@style/ItemChat.TextView.Title"
-            android:id="@+id/tv_title_single"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="chat title"
-            android:layout_toEndOf="@id/iv_avatar_single"
-            android:layout_toStartOf="@id/tv_date_single"
-            android:layout_marginStart="@dimen/spacing_normal_16"
+            android:layout_alignParentStart="true"
             android:layout_marginEnd="@dimen/spacing_normal_16"/>
 
     <TextView
+            style="@style/ItemChat.TextView.Title"
+            android:id="@+id/tv_title_archive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="chat title"
+            android:text="@string/item_archive_title"
+            android:layout_toEndOf="@id/iv_avatar_archive"
+            android:layout_toStartOf="@id/tv_date_archive"
+            android:layout_marginEnd="@dimen/spacing_normal_16"
+            android:maxLines="1"/>
+
+    <TextView
+            style="@style/ItemChat.TextView.Author"
+            android:id="@+id/tv_message_author_archive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="John_Doe"
+            android:layout_toEndOf="@id/iv_avatar_archive"
+            android:layout_marginEnd="@dimen/spacing_tiny_4"
+            android:layout_below="@id/tv_title_archive"/>
+
+    <TextView
             style="@style/ItemChat.TextView.Description"
-            android:id="@+id/tv_message_single"
+            android:id="@+id/tv_message_archive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Когда я проходил интенсив, я мало спал"
-            android:layout_toEndOf="@id/iv_avatar_single"
-            android:layout_toStartOf="@id/tv_counter_single"
-            android:layout_marginStart="@dimen/spacing_normal_16"
+            android:layout_toEndOf="@id/tv_message_author_archive"
+            android:layout_toStartOf="@id/tv_counter_archive"
             android:layout_marginEnd="@dimen/spacing_normal_16"
-            android:layout_below="@id/tv_title_single"/>
+            android:layout_below="@id/tv_title_archive"/>
 
     <TextView
-            android:id="@+id/tv_date_single"
+            android:id="@+id/tv_date_archive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
@@ -52,7 +57,7 @@
             android:layout_alignParentTop="true"
             tools:text="18:00"/>
     <TextView
-            android:id="@+id/tv_counter_single"
+            android:id="@+id/tv_counter_archive"
             android:minWidth="20dp"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/counter_size"

@@ -1,6 +1,17 @@
 package ru.skillbranch.devintensive.utils
 
+import android.content.res.Resources
+import android.util.TypedValue
+import androidx.annotation.AttrRes
+
 object Utils {
+
+    fun getThemeColor(@AttrRes attrColorRes: Int, theme: Resources.Theme): Int {
+        val value = TypedValue()
+        theme.resolveAttribute(attrColorRes, value, true)
+        return value.data
+    }
+
     fun parseFullName(fullName: String?): Pair<String?, String?> {
 
         val fn = if (fullName?.trim() == "") null else fullName

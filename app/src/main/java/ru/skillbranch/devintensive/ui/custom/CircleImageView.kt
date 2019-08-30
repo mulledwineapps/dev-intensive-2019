@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -38,12 +37,14 @@ open class CircleImageView @JvmOverloads constructor(
         private const val DEFAULT_BORDER_WIDTH = 2
         private const val DEFAULT_HIGHLIGHT_COLOR = 0x32000000
         private const val DEFAULT_HIGHLIGHT_ENABLE = true
+        private const val DEFAULT_TEXT_SIZE = 48f
     }
 
     private var borderColor = DEFAULT_BORDER_COLOR
-    private var borderWidth: Float = DEFAULT_BORDER_WIDTH.dpToPx()
+    private var borderWidth: Int = DEFAULT_BORDER_WIDTH.dpToPx()
     private var highlightColor = DEFAULT_HIGHLIGHT_COLOR
     private var highlightEnable: Boolean = DEFAULT_HIGHLIGHT_ENABLE
+    private var textSize: Float = DEFAULT_TEXT_SIZE.spToPx()
 
     private lateinit var bitmapShader: Shader
     private var shaderMatrix: Matrix = Matrix()
@@ -72,21 +73,22 @@ open class CircleImageView @JvmOverloads constructor(
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
             borderColor = a.getColor(R.styleable.CircleImageView_cv_borderColor, borderColor)
-            borderWidth = a.getDimension(R.styleable.CircleImageView_cv_borderWidth, borderWidth)
+            borderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_cv_borderWidth, borderWidth)
             highlightColor = a.getColor(R.styleable.CircleImageView_highlightColor, highlightColor)
             highlightEnable = a.getBoolean(R.styleable.CircleImageView_highlightEnable, highlightEnable)
+            textSize = a.getDimension(R.styleable.CircleImageView_cv_textSize, textSize)
             a.recycle()
         }
 
         strokePaint.color = borderColor
         strokePaint.style = Paint.Style.STROKE
-        strokePaint.strokeWidth = borderWidth
+        strokePaint.strokeWidth = borderWidth.toFloat()
 
         pressedPaint.color = highlightColor
         pressedPaint.style = Paint.Style.FILL
 
         // @param textSize set the paint's text size in pixel units.
-        textPaint.textSize = 48f.spToPx()
+        textPaint.textSize = textSize
         textPaint.color = Color.WHITE
         textPaint.textAlign = Paint.Align.CENTER
 
@@ -94,10 +96,10 @@ open class CircleImageView @JvmOverloads constructor(
     }
 
     @Dimension
-    fun getBorderWidth(): Int = borderWidth.roundToInt()
+    fun getBorderWidth(): Int = borderWidth
 
     fun setBorderWidth(@Dimension dp: Int) {
-        borderWidth = dp.toFloat()
+        borderWidth = dp
         this.invalidate()
     }
 

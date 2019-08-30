@@ -7,6 +7,21 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
 
+        <item name="colorSwipeBackground">@color/color_primary_dark</item>
+        <item name="colorItem">@color/color_item</item>
+        <item name="colorItemSelected">@color/silver_alpha_100</item>
+        <item name="colorTextItemTitle">@color/color_primary_light</item>
+        <item name="colorTextItemDescription">@color/color_gray_dark</item>
+        <item name="colorCounter">@color/color_indicator</item>
+        <item name="colorIndicator">@color/color_green</item>
+        <item name="colorSnackbarText">@android:color/white</item>
+        <item name="colorToolbar">@color/color_primary</item>
+        <item name="chipCloseIconTint">@android:color/white</item>
+        <item name="chipBackgroundColor">@color/color_primary_light</item>
+        <item name="android:windowBackground">@color/alabaster</item>
+        <item name="colorIconSelected">@color/color_primary</item>
+        <item name="colorArchiveIconBackground">@color/color_gray</item>
+
         <item name="colorAccentedSurface">@color/color_primary_light</item>
         <item name="colorIcon">@color/color_gray</item>
         <item name="colorDivider">@color/color_divider_dark</item>

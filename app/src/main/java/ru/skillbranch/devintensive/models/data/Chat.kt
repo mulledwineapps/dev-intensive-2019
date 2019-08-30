@@ -2,10 +2,8 @@ package ru.skillbranch.devintensive.models.data
 
 import ru.skillbranch.devintensive.extensions.shortFormat
 import ru.skillbranch.devintensive.models.BaseMessage
-import ru.skillbranch.devintensive.models.TextMessage
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
-import kotlin.math.min
 
 data class Chat(
     val id: String,
@@ -14,10 +12,6 @@ data class Chat(
     var messages: MutableList<BaseMessage> = mutableListOf(),
     var isArchived: Boolean = false
 ) {
-
-    companion object {
-        private const val MAX_LENGTH_OF_SHORT_MESSAGE = 128
-    }
 
     fun unreadableMessageCount(): Int = messages.count { !it.isReaded }
 
@@ -29,15 +23,34 @@ data class Chat(
         if (messages.isEmpty()) return "Сообщений ещё нет" to "@John_Doe"
 
         val lastMessage = messages.last()
-        val text =
-            if (lastMessage is TextMessage) lastMessage.text.orEmpty().trim()
-            else "${lastMessage.from.firstName} - отправил фото"
 
-        return (if (text.isNotEmpty()) text.substring(0, min(text.length, MAX_LENGTH_OF_SHORT_MESSAGE)) else "") to
-                "${lastMessage.from.firstName}"
+        return lastMessage.shortMessage() to "${lastMessage.from.firstName}"
     }
 
     private fun isSingle(): Boolean = members.size == 1
+
+    companion object {
+        private const val ARCHIVE_ID = "-1"
+        fun toArchiveChatItem(chats: List<Chat>): ChatItem? {
+            return if (chats.isEmpty()) null
+            else {
+                val lastChat = chats.sortedByDescending { it.lastMessageDate() }.first()
+                val (message, author) = lastChat.lastMessageShort()
+                ChatItem(
+                    ARCHIVE_ID,
+                    null,
+                    "",
+                    "Архив чатов",
+                    message,
+                    chats.sumBy { it.unreadableMessageCount() },
+                    lastChat.lastMessageDate()?.shortFormat(),
+                    false,
+                    ChatType.ARCHIVE,
+                    author
+                )
+            }
+        }
+    }
 
     fun toChatItem(): ChatItem {
         return if (isSingle()) {

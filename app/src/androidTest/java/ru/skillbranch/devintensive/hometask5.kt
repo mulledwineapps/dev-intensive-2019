@@ -3,7 +3,6 @@ package ru.skillbranch.devintensive
 //import androidx.test.core.app.ActivityScenario
 import android.content.res.Resources
 import android.content.res.Resources.NotFoundException
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.runner.AndroidJUnit4
 import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.item_user_list.view.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.not
@@ -37,13 +35,14 @@ import ru.skillbranch.devintensive.ui.adapters.ChatAdapter
 import ru.skillbranch.devintensive.ui.adapters.UserAdapter
 import ru.skillbranch.devintensive.ui.group.GroupActivity
 import ru.skillbranch.devintensive.ui.main.MainActivity
+import java.lang.Thread.sleep
 import java.util.*
 import org.hamcrest.CoreMatchers.`is` as Is
 
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class hometask5 {
+class Hometask5 {
 
     /**
      * Проверяется реализация методов класса Chat (unreadableMessageCount(), lastMessageDate(), lastMessageShort())
@@ -207,13 +206,21 @@ class hometask5 {
             val user = adapter!!.items[position]
             onView(withId(R.id.rv_user_list))
                 .perform(
-                    RecyclerViewActions.actionOnItemAtPosition<ChatAdapter.ChatItemViewHolder>(
+                    RecyclerViewActions.actionOnItemAtPosition<UserAdapter.UserViewHolder>(
                         position,
                         click()
                     )
                 )
 
-            onView(RecyclerViewMatcher(R.id.rv_user_list).atPositionOnView(position, R.id.iv_selected))
+            onView(withId(R.id.rv_user_list))
+                .perform(RecyclerViewActions.scrollToPosition<UserAdapter.UserViewHolder>(position))
+
+            onView(
+                RecyclerViewMatcher(R.id.rv_user_list).atPositionOnView(
+                    position,
+                    R.id.iv_selected
+                )
+            )
                 .check(matches(isDisplayed()))
 
             onView(withTagValue(Is(user.id)))
@@ -225,7 +232,15 @@ class hometask5 {
                 .perform(ClickCloseIconAction())
                 .check(doesNotExist())
 
-            onView(RecyclerViewMatcher(R.id.rv_user_list).atPositionOnView(position, R.id.iv_selected))
+            onView(withId(R.id.rv_user_list))
+                .perform(RecyclerViewActions.scrollToPosition<UserAdapter.UserViewHolder>(position))
+
+            onView(
+                RecyclerViewMatcher(R.id.rv_user_list).atPositionOnView(
+                    position,
+                    R.id.iv_selected
+                )
+            )
                 .check(matches(not(isDisplayed())))
         }
     }
@@ -247,23 +262,19 @@ class hometask5 {
             Assert.fail("UserAdapter must be not null")
         }
 
-        // val filteredLetter = adapter!!.items.first().fullName.substring(0..1)
-        val filteredLetter = "a"
+        val filteredLetter = adapter!!.items.first().fullName.substring(0..1)
         val filteredItems = adapter!!.items.filter { it.fullName.contains(filteredLetter, true) }
-
-        Log.d("M_hometask5", "filteredLetter = $filteredLetter")
-        Log.d("M_hometask5", "${adapter!!.items.size} items: ${adapter!!.items.joinToString { it.fullName }}")
-        Log.d("M_hometask5", "${filteredItems.size} filteredItems: ${filteredItems.joinToString { it.fullName }}")
 
         onView(withId(R.id.action_search))
             .perform(click())
+
         onView(isAssignableFrom(EditText::class.java))
             .perform(replaceText(filteredLetter), pressImeActionButton(), pressBack())
 
         for (position in 0 until filteredItems.size) {
             onView(withId(R.id.rv_user_list))
                 .perform(
-                    RecyclerViewActions.actionOnItemAtPosition<ChatAdapter.ChatItemViewHolder>(
+                    RecyclerViewActions.actionOnItemAtPosition<UserAdapter.UserViewHolder>(
                         position,
                         click()
                     )
@@ -275,12 +286,18 @@ class hometask5 {
 
         filteredItems.forEach { user ->
             val position = adapter!!.items.indexOfFirst { item -> item.id == user.id }
-            Log.d("M_hometask5", "position = $position")
+
+            onView(withId(R.id.rv_user_list))
+                .perform(
+                    RecyclerViewActions.scrollToPosition<UserAdapter.UserViewHolder>(position)
+                )
+
             onView(
                 RecyclerViewMatcher(R.id.rv_user_list)
                     .atPositionOnView(position, R.id.iv_selected)
             )
                 .check(matches(isDisplayed()))
+            sleep(1000)
         }
     }
 
@@ -304,7 +321,7 @@ class hometask5 {
         for (position in 0..3) {
             onView(withId(R.id.rv_user_list))
                 .perform(
-                    RecyclerViewActions.actionOnItemAtPosition<ChatAdapter.ChatItemViewHolder>(
+                    RecyclerViewActions.actionOnItemAtPosition<UserAdapter.UserViewHolder>(
                         position,
                         click()
                     )
@@ -376,8 +393,6 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
                     val recyclerView = view.rootView.findViewById<View>(recyclerViewId) as RecyclerView
                     if (recyclerView.id == recyclerViewId) {
                         childView = recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
-
-                        Log.d("M_hometask5","selected ${recyclerView.findViewHolderForAdapterPosition(position)!!.itemView.iv_selected.visibility}")
                     } else {
                         return false
                     }

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile_constraint.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 
@@ -59,7 +60,7 @@ class ProfileActivity : AppCompatActivity() {
             for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
-            iv_avatar.setDefaultAvatar(it["initials"].toString(), getThemeAccentColor())
+            iv_avatar.setDefaultAvatar(it["initials"].toString(), Utils.getThemeColor(R.attr.colorAccent, theme))
         }
     }
 
@@ -97,6 +98,7 @@ class ProfileActivity : AppCompatActivity() {
                     wr_repository.error = "Невалидный адрес репозитория"
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -128,7 +130,7 @@ class ProfileActivity : AppCompatActivity() {
         with(btn_edit) {
             val filter: ColorFilter? = if (isEdit) {
                 PorterDuffColorFilter(
-                    getThemeAccentColor(),
+                    Utils.getThemeColor(R.attr.colorAccent, theme),
                     PorterDuff.Mode.SRC_IN // режим наложения
                 )
             } else {
@@ -181,12 +183,6 @@ class ProfileActivity : AppCompatActivity() {
         ).apply {
             viewModel.saveProfileDate(this)
         } // apply - для того, чтобы обратиться к только что созданному инстансу Profile
-    }
-
-    private fun getThemeAccentColor(): Int {
-        val value = TypedValue()
-        theme.resolveAttribute(R.attr.colorAccent, value, true)
-        return value.data
     }
 
 // мультиселект:
