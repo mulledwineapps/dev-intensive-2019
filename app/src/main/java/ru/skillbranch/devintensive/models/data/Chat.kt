@@ -19,8 +19,8 @@ data class Chat(
         return if (messages.isEmpty()) null else messages.last().date
     }
 
-    fun lastMessageShort(): Pair<String, String> {
-        if (messages.isEmpty()) return "Сообщений ещё нет" to "@John_Doe"
+    fun lastMessageShort(): Pair<String, String?> {
+        if (messages.isEmpty()) return "Сообщений ещё нет" to null
 
         val lastMessage = messages.last()
 
