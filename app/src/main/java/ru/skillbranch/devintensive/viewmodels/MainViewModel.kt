@@ -30,9 +30,8 @@ class MainViewModel : ViewModel() {
             val (archived, unarchived) = this.chats.value!!.partition { it.isArchived }
 
             val chatItems = (
-                    if (queryStr.isEmpty()) unarchived
-                    else unarchived.filter { it.title.contains(queryStr, true) })
-                .map { it.toChatItem() }
+                    if (queryStr.isEmpty()) unarchived.map { it.toChatItem() }
+                    else unarchived.map { it.toChatItem() }.filter { it.title.contains(queryStr, true) })
                 .sortedBy { it.id.toInt() }
                 .toMutableList()
 
