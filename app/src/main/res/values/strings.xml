@@ -11,4 +11,5 @@
     <string name="item_archive_title">Архив чатов</string>
     <string name="activity_archive_title">Архив чатов</string>
     <string name="activity_group_title">Создание группы</string>
+    <string name="item_author">\@%1$s</string>
 </resources>

@@ -158,9 +158,7 @@ class ChatAdapter(val listener: (ChatItem, Int) -> Unit) : RecyclerView.Adapter<
 
             with(tv_message_author_group) {
                 visibility = if (item.author != null) View.VISIBLE else View.GONE
-                // TODO: Сделать placeholder
-                val author = "@${item.author}"
-                text = author
+                text = resources.getString(R.string.item_author, item.author)
             }
 
             itemView.setOnClickListener {
@@ -184,8 +182,8 @@ class ChatAdapter(val listener: (ChatItem, Int) -> Unit) : RecyclerView.Adapter<
             tv_message_archive.text = item.shortDescription?.trim()
 
             with(tv_message_author_archive) {
-                visibility = if (item.messageCount > 0) View.VISIBLE else View.GONE
-                text = item.author
+                visibility = if (item.author != null) View.VISIBLE else View.GONE
+                text = resources.getString(R.string.item_author, item.author)
             }
 
             itemView.setOnClickListener {
