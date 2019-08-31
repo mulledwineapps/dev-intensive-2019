@@ -14,11 +14,12 @@ class MainViewModel : ViewModel() {
     // вызывая Transformations.map мы неявным образом подписываемся на изменения источника
     // не используйте методы observe внутри view модели - нужно использовать либо Transformations, либо MediatorData
 
-    private val chats = Transformations.map(chatRepository.loadChats()) { chats ->
-        return@map chats // .filter { !it.isArchived }
-            //.map { it.toChatItem() }
-            .sortedBy { it.id.toInt() }
-    }
+    private val chats = chatRepository.loadChats()
+    // Transformations.map(chatRepository.loadChats()) { chats ->
+    //     return@map chats.filter { !it.isArchived }
+    //         .map { it.toChatItem() }
+    //         .sortedBy { it.id.toInt() }
+    // }
 
     fun getChatData(): LiveData<List<ChatItem>> {
         val result = MediatorLiveData<List<ChatItem>>()
@@ -30,8 +31,10 @@ class MainViewModel : ViewModel() {
 
             val chatItems = (
                     if (queryStr.isEmpty()) unarchived
-                    else unarchived.filter { it.title.contains(queryStr, true) }
-                    ).map { it.toChatItem() }.toMutableList()
+                    else unarchived.filter { it.title.contains(queryStr, true) })
+                .map { it.toChatItem() }
+                .sortedBy { it.id.toInt() }
+                .toMutableList()
 
             Chat.toArchiveChatItem(archived)?.let {
                 chatItems.add(0, it)
