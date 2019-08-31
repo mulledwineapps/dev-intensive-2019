@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var viewModel: MainViewModel
-    private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,14 +57,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == R.id.switch_theme_item) {
-            profileViewModel.switchTheme()
-            true
-        } else
-            super.onOptionsItemSelected(item)
     }
 
     private fun initToolbar() {
@@ -127,13 +118,5 @@ class MainActivity : AppCompatActivity() {
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getChatData().observe(this, Observer { chatAdapter.updateData(it) })
-
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        profileViewModel.getTheme().observe(this, Observer { updateTheme(it) })
-    }
-
-    private fun updateTheme(mode: Int) {
-        // при каждом вызове setLocalNightMode происходит пересоздание activity!
-        delegate.setLocalNightMode(mode)
     }
 }

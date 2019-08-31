@@ -24,7 +24,7 @@ data class Chat(
 
         val lastMessage = messages.last()
 
-        return lastMessage.shortMessage() to "${lastMessage.from.firstName}"
+        return lastMessage.shortMessage() to "@${lastMessage.from.firstName}"
     }
 
     private fun isSingle(): Boolean = members.size == 1

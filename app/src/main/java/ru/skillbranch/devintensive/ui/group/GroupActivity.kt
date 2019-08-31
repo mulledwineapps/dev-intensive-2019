@@ -32,7 +32,6 @@ class GroupActivity : AppCompatActivity() {
 
     private lateinit var userAdapter: UserAdapter
     private lateinit var viewModel: GroupViewModel
-    private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,10 +72,6 @@ class GroupActivity : AppCompatActivity() {
                 overridePendingTransition(R.anim.idle, R.anim.bottom_down)
                 true
             }
-            R.id.switch_theme_item -> {
-                profileViewModel.switchTheme()
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -113,14 +108,6 @@ class GroupActivity : AppCompatActivity() {
             updateChips(it)
             toggleFab(it.size > 1)
         })
-
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        profileViewModel.getTheme().observe(this, Observer { updateTheme(it) })
-    }
-
-    private fun updateTheme(mode: Int) {
-        // при каждом вызове setLocalNightMode происходит пересоздание activity!
-        delegate.setLocalNightMode(mode)
     }
 
     private fun toggleFab(isShow: Boolean) {
