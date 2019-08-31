@@ -12,6 +12,7 @@
         <item name="colorItemSelected">@color/mine_shaft</item>
         <item name="colorTextItemTitle">@android:color/white</item>
         <item name="colorTextItemDescription">@color/color_gray</item>
+        <item name="colorItemDate">@color/color_gray</item>
         <item name="colorCounter">@color/color_gray_dark</item>
         <item name="colorIndicator">@color/color_accent_night</item>
         <item name="colorSnackbarText">@color/cod_gray</item>

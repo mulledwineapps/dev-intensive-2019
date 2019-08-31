@@ -12,6 +12,7 @@
         <item name="colorItemSelected">@color/silver_alpha_100</item>
         <item name="colorTextItemTitle">@color/color_primary_light</item>
         <item name="colorTextItemDescription">@color/color_gray_dark</item>
+        <item name="colorItemDate">@color/color_gray_dark</item>
         <item name="colorCounter">@color/color_indicator</item>
         <item name="colorIndicator">@color/color_green</item>
         <item name="colorSnackbarText">@android:color/white</item>

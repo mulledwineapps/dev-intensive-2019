@@ -13,6 +13,7 @@
     <attr name="colorItemSelected" format="color"/>
     <attr name="colorTextItemTitle" format="color"/>
     <attr name="colorTextItemDescription" format="color"/>
+    <attr name="colorItemDate" format="color"/>
     <attr name="colorCounter" format="color"/>
     <attr name="colorIndicator" format="color"/>
     <attr name="colorSnackbarText" format="color"/>
