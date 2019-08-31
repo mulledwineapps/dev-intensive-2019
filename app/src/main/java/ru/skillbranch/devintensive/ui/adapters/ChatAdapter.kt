@@ -157,7 +157,7 @@ class ChatAdapter(val listener: (ChatItem, Int) -> Unit) : RecyclerView.Adapter<
             tv_message_group.text = item.shortDescription?.trim()
 
             with(tv_message_author_group) {
-                visibility = if (item.messageCount > 0) View.VISIBLE else View.GONE
+                visibility = if (item.author != null) View.VISIBLE else View.GONE
                 text = item.author
             }
 
